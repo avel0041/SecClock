@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html>
+  <body>
+    <canvas id="main" width="100" height="100"></canvas>
+    <script type="text/javascript">
+		var canvas = document.getElementById('main');
+		var context = canvas.getContext('2d');
+		
+		setInterval(() => {sec()}, 1000)
+		
+		function sec(){
+			var date = new Date();
+            var sec = date.getSeconds();
+			var secValue = 6*sec;
+			var X = 0, Y = 0;
+			context.clearRect(0,0,100,100);
+			X = Math.sin(secValue / (180/Math.PI))*35 + 50;
+			Y = -Math.cos(secValue / (180/Math.PI))*35 + 50;
+			drawLine(50, 50, X, Y);
+			drawCircle(50, 50, 40);
+		}
+		
+		function drawLine(X0, Y0, X1, Y1){
+			var eps = 0;
+			var x = X0, y = Y0;
+			var flag = false;
+			context.fillRect(X0,Y0,1,1);
+			if (Math.abs(Y1 - Y0) < Math.abs(X1 - X0)) flag = true;
+			while (x!=Math.round(X1) && flag){
+				eps = eps + 2*Math.abs(Y1 - Y0);
+				if (eps >= Math.abs(X1-X0)){
+					if (Y1 - Y0 > 0){
+						y = y + 1;
+					} else {
+						y = y - 1;
+					}
+					eps = eps - 2*Math.abs(X1 - X0);
+				}
+				if (X1 - X0 > 0){
+						x = x + 1;
+					} else {
+						x = x - 1;
+					}
+				context.fillRect(x,y,1,1);
+			}
+			
+			while (y!=Math.round(Y1) && !flag){
+				eps = eps + 2*Math.abs(X1 - X0);
+				if (eps >= Math.abs(Y1-Y0)){
+					if (X1 - X0 > 0){
+						x = x + 1;
+					} else {
+						x = x - 1;
+					}
+					eps = eps - 2*Math.abs(Y1 - Y0);
+				}
+				if (Y1 - Y0 > 0){
+						y = y + 1;
+					} else {
+						y = y - 1;
+					}
+				context.fillRect(x,y,1,1);
+			}
+		}
+		
+		function drawCircle(X0, Y0, R){
+			var x = 0, y = R;
+			var eps = 3 - 2 * R;
+            while (x <= y) {
+				context.fillRect(x+X0,y+Y0,1,1);
+				context.fillRect(x+X0,-y+Y0,1,1);
+				context.fillRect(-x+X0,-y+Y0,1,1);
+				context.fillRect(-x+X0,y+Y0,1,1);
+				context.fillRect(y+X0,x+Y0,1,1);
+				context.fillRect(y+X0,-x+Y0,1,1);
+				context.fillRect(-y+X0,-x+Y0,1,1);
+				context.fillRect(-y+X0,x+Y0,1,1);
+				if(eps <= 0) {
+					eps = eps + 4*x + 6;
+					x = x + 1;
+				} else{
+					eps =  eps + 4*x - 4*y + 10;
+					x = x + 1;
+					y = y - 1;
+				}
+			}
+        }
+	</script>
+  </body>
+</html>
